@@ -2,8 +2,7 @@
 
 ### [Visual plan](visual_plan.svg)
 
-### Component plan
-![component plan](component_plan.svg)
+### [Component plan](component_plan.svg)
 
 # User Stories
 

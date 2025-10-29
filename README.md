@@ -4,6 +4,18 @@
 
 ### [Component plan](component_plan.svg)
 
+# Technologies used
+
+## Front-end
+- React.js
+- Typescript
+- Material UI
+
+## Back-end
+- Express.js
+- Prisma
+- PostgreSQL
+
 # User Stories
 
 ## MVP
@@ -130,4 +142,6 @@
 - Search input filters list dynamically  
 - Case-insensitive search allowed  
 
-### 3. As a user, I want to register and login with my Google account, to have my account be more secure.
+### 3. As a user, I want to register and login with my Google account, to have my account be more secure.  
+**Acceptance Criteria**  
+- A button to register/login with google account.

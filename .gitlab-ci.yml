@@ -3,7 +3,7 @@ default:
 
 cache:
   paths:
-    - node_modules/
+    - backend/node_modules/
 
 stages:
   - install

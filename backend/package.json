@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "dev": "nodemon --legacy-watch",
     "lint": "eslint . --ext .ts"
   },

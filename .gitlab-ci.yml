@@ -1,0 +1,29 @@
+default:
+  image: node
+
+cache:
+  paths:
+    - backend/node_modules/
+
+stages:
+  - install
+  - lint
+  - build
+
+install:
+  stage: install
+  script:
+    - cd backend
+    - npm ci
+
+lint:
+  stage: lint
+  script:
+    - cd backend
+    - npm run lint
+
+build:
+  stage: build
+  script:
+    - cd backend
+    - npm run build

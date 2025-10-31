@@ -7,7 +7,7 @@ export default defineConfig({
     host: '0.0.0.0', // Kuuntele kaikkia verkkoliittymiä
     port: 5173,
     watch: {
-      usePolling: true, // Tärkeä Dockerissa hot reloadille
+      usePolling: true, // docker hot reaload
     },
   }
 })

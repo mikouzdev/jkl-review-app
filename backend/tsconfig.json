@@ -8,6 +8,9 @@
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "isolatedModules": true,
+    "types": [
+      "node"
+    ],
     "verbatimModuleSyntax": true,
     /* Strictness */
     "strict": true,
@@ -23,6 +26,6 @@
     ]
   },
   "include": [
-    "src"
+    "src",
   ],
 }

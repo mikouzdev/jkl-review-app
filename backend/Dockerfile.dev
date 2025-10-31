@@ -2,17 +2,13 @@ FROM node:24-alpine
 
 WORKDIR /app
 
-# Kopioi package.json ja package-lock.json
 COPY package*.json ./
 
 # Asenna riippuvuudet
 RUN npm install
 
-# Kopioi muu koodi (tämä overridataan volumella dev-aikana)
 COPY . .
 
-# Expose portti
 EXPOSE 3000
 
-# Käytä tsx tai nodemon hot reloadiin
 CMD ["npm", "run", "dev"]

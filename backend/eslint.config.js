@@ -8,4 +8,13 @@ export default defineConfig(
     eslint.configs.recommended,
     tseslint.configs.recommended,
     tseslint.configs.stylistic,
+    {
+        ignores: [
+            "dist",
+            "node_modules",
+            "prisma",
+            "**/*.config.*",
+            "**/*.test.*",
+        ],
+    }
 );

@@ -4,6 +4,7 @@ default:
 cache:
   paths:
     - backend/node_modules/
+    - backend/src/generated/
 
 stages:
   - install
@@ -26,4 +27,6 @@ build:
   stage: build
   script:
     - cd backend
+    - export DATABASE_URL="postgresql://fake:fake@localhost:5432/fake"
+    - npx prisma generate
     - npm run build

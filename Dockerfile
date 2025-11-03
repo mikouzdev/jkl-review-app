@@ -14,6 +14,7 @@ WORKDIR /backend
 COPY backend/package*.json ./
 RUN npm ci
 COPY backend/ ./
+RUN npx prisma generate
 RUN npm run build
 
 # prod runtime
@@ -26,6 +27,9 @@ RUN npm ci
 
 # copy backend compiled output
 COPY --from=backend /backend/dist ./dist
+
+# copy prisma client to match the expected path structure
+COPY --from=backend /backend/src/generated ./dist/generated
 
 # copy frontend compiled output
 COPY --from=frontend /frontend/dist ./frontend/dist

@@ -27,8 +27,7 @@ router.post("/register", async (req: Request, res: Response) => {
     if (!createdUser) return res.status(500).send({ error: "could not create user" })
     console.log("Created user:", createdUser)
 
-    const token = generateToken({ username, role })
-    res.send({ token })
+    res.send({ message: "user created successfully" })
 })
 
 // endpoint for log in
@@ -39,13 +38,14 @@ router.post("/login", async (req: Request, res: Response) => {
     const user = await userRepo.findUser({ email })
     if (!user) return res.status(401).send({ error: "user doesnt exist" });
 
+    const userId = user.id;
     const username = user.username;
     const role = user.role;
 
     const passwordMatches = await argon2.verify(user.password_hash, password)
     if (!passwordMatches) return res.status(401).send({ error: "unauthorized" });
 
-    const token = generateToken({ username, role })
+    const token = generateToken({ userId, username, role })
     res.send({ token })
 })
 

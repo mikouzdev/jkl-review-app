@@ -2,8 +2,8 @@ import { type Request, type Response, type NextFunction } from "express";
 import { verifyToken } from "../utils/jwt.js";
 import type { JwtPayload } from "jsonwebtoken";
 
-interface AuthenticatedRequest extends Request {
-    user?: { username: string, role: string }
+export interface AuthenticatedRequest extends Request {
+    user?: { userId: number, username: string, role: string }
 }
 
 export const authenticate = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -14,7 +14,11 @@ export const authenticate = (req: AuthenticatedRequest, res: Response, next: Nex
 
     try {
         const decodedToken = verifyToken(token) as JwtPayload
-        req.user = { username: decodedToken.username, role: decodedToken.role };
+        req.user = {
+            userId: decodedToken.userId,
+            username: decodedToken.username,
+            role: decodedToken.role
+        };
         next()
     } catch (error) {
         console.error(error)

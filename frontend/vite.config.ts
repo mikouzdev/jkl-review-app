@@ -9,5 +9,12 @@ export default defineConfig({
     watch: {
       usePolling: true, // docker hot reaload
     },
+    proxy: {
+      "/api": {
+        target: "http://backend:3000", // docker servicen nimi
+        changeOrigin: true,
+        secure: false,
+      }
+    }
   }
 })

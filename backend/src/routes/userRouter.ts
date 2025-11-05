@@ -2,6 +2,7 @@ import express, { type Request, type Response } from "express";
 import argon2 from "argon2"
 import { generateToken } from "../utils/jwt.js"
 import { userRepo } from "../repos/userRepo.js";
+import { authenticate, type AuthenticatedRequest } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -47,6 +48,11 @@ router.post("/login", async (req: Request, res: Response) => {
 
     const token = generateToken({ userId, username, role })
     res.send({ token })
+})
+
+// endpoint to get logged in user info
+router.get("/me", authenticate, async (req: AuthenticatedRequest, res: Response) => {
+    res.send({ user: req.user })
 })
 
 export default router;

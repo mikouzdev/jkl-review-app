@@ -1,6 +1,7 @@
 import express from "express";
 import userRouter from "./routes/userRouter.js";
 import districtRouter from "./routes/districtRouter.js"
+import reviewRouter from "./routes/reviewRouter.js";
 import { authenticate } from "./middleware/auth.js";
 
 const server = express();
@@ -9,6 +10,7 @@ server.use(express.json());
 
 server.use("/api/users", userRouter);
 server.use("/api/districts", districtRouter)
+server.use("/api/reviews", reviewRouter)
 
 server.get("/api", (_req, res) => {
     res.send("working!");

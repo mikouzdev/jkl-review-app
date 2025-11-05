@@ -25,3 +25,8 @@ export const authenticate = (req: AuthenticatedRequest, res: Response, next: Nex
         return res.status(401).send("Invalid token")
     }
 }
+
+export const requireAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    if (req.user?.role !== "admin") return res.status(403).send({ error: "unauthorized role" })
+    next();
+}

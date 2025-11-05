@@ -22,5 +22,81 @@ export const reviewRepo = {
             }
         })
         return createdReview;
+    },
+
+    getAllReviews: async (limit: number) => {
+        const reviews = await prisma.ratings.findMany({
+            take: limit,
+            orderBy: {
+                created_at: "desc"
+            }
+        })
+        return reviews;
+    },
+
+    getAllUserReviews: async (userId: number) => {
+        const reviews = await prisma.ratings.findMany({
+            where: { user_id: userId }
+        })
+
+        return reviews;
+    },
+
+    deleteReview: async (reviewId: number, userId: number, userRole: string) => {
+        const review = await prisma.ratings.findUnique({
+            where: { id: reviewId },
+            select: { user_id: true },
+        })
+
+        if (!review) return { error: "not found" };
+
+        if (review.user_id !== userId && userRole !== "admin") {
+            return { error: "forbidden" };
+        }
+
+        const deleted = await prisma.ratings.delete({
+            where: { id: reviewId },
+        })
+
+        return { deleted };
+    },
+
+    updateReviewComment: async (reviewId: number, newComment: string) => {
+        const updated = await prisma.ratings.update({
+            where: { id: reviewId },
+            data: {
+                comment: newComment,
+                updated_at: new Date()
+            },
+        })
+
+        return { updated };
+    },
+
+    updateReview: async (reviewId: number, newReview: Review, userId: number) => {
+        const review = await prisma.ratings.findUnique({
+            where: { id: reviewId },
+            select: { user_id: true }
+        })
+
+        if (!review) return { error: "not found" }
+
+        if (review.user_id !== userId) {
+            return { error: "forbidden" };
+        }
+
+        const updated = await prisma.ratings.update({
+            where: { id: reviewId },
+            data: {
+                safety: newReview.ratings.safety,
+                services: newReview.ratings.services,
+                atmosphere: newReview.ratings.atmosphere,
+                cost_of_living: newReview.ratings.cost_of_living,
+                comment: newReview.comment,
+                updated_at: new Date()
+            },
+        })
+
+        return { updated };
     }
 }

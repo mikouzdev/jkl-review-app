@@ -1,8 +1,10 @@
+import RegisterPage from "./pages/RegisterPage"
+
 function App() {
 
   return (
     <>
-      <div>hello world v1</div>
+      <RegisterPage />
     </>
   )
 }

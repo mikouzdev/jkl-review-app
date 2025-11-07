@@ -28,7 +28,7 @@ router.post("/register", async (req: Request, res: Response) => {
     if (!createdUser) return res.status(500).send({ error: "could not create user" })
     console.log("Created user:", createdUser)
 
-    res.send({ message: "user created successfully" })
+    res.status(201).send({ message: "user created successfully" })
 })
 
 // endpoint for log in

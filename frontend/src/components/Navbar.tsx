@@ -21,13 +21,13 @@ function Navbar() {
 
                 {isAuthenticated ? (
                     <Box sx={{ display: "flex", gap: 1 }}>
-                        <Button variant="outlined">Profile</Button>
-                        <Button variant="outlined" onClick={logout}>Logout</Button>
+                        <Button variant="outlined">Profiili</Button>
+                        <Button variant="outlined" onClick={logout}>Kirjaudu ulos</Button>
                     </Box>
                 ) :
                     <Box sx={{ display: "flex", gap: 1 }}>
-                        <Button variant="outlined" component={Link} to="/login">Log in</Button>
-                        <Button variant="outlined" component={Link} to="/register">Register</Button>
+                        <Button variant="outlined" component={Link} to="/login">Kirjaudu</Button>
+                        <Button variant="outlined" component={Link} to="/register">Rekisteröidy</Button>
                     </Box>
                 }
             </Toolbar>

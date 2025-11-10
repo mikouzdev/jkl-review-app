@@ -21,7 +21,7 @@ function Navbar() {
 
                 {isAuthenticated ? (
                     <Box sx={{ display: "flex", gap: 1 }}>
-                        <Button variant="outlined">Profiili</Button>
+                        <Button component={Link} to="/profile" variant="outlined">Profiili</Button>
                         <Button variant="outlined" onClick={logout}>Kirjaudu ulos</Button>
                     </Box>
                 ) :

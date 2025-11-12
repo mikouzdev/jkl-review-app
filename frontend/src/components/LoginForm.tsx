@@ -1,4 +1,4 @@
-import { Container, Button, Paper, Typography, Box, TextField } from "@mui/material";
+import { Button, Paper, Typography, Box, TextField } from "@mui/material";
 
 export interface LoginData {
   email: string;
@@ -15,12 +15,13 @@ interface Props {
 
 function LoginForm({ form, handleChange, handleSubmit, error, isLoading }: Props) {
   return (
-    <Container
+    <Box
       sx={{
-        height: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        width: "100%",
+        maxWidth: 300,
       }}
     >
       <Paper
@@ -75,7 +76,7 @@ function LoginForm({ form, handleChange, handleSubmit, error, isLoading }: Props
           </Button>
         </Box>
       </Paper>
-    </Container>
+    </Box>
   );
 }
 

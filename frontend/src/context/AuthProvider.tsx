@@ -1,4 +1,5 @@
 import axios from "axios";
+import { googleLogout, type CredentialResponse } from "@react-oauth/google";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
@@ -15,6 +16,8 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+
+  googleSignIn: (credential: CredentialResponse) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -68,7 +71,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const googleSignIn = async (credential: CredentialResponse) => {
+    try {
+      const response = await axios.post("/api/auth/google", credential);
+      const { token: jwt } = response.data;
+
+      localStorage.setItem("token", jwt);
+      setToken(jwt);
+
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const logout = () => {
+    googleLogout();
     localStorage.removeItem("token");
     setToken(null);
     setUser(null);
@@ -77,11 +95,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const value: AuthContextType = {
     user,
     token,
-    isAuthenticated: !!user,
+    isAuthenticated: !!token,
     isAdmin: user?.role === "admin",
     isLoading,
     login,
     logout,
+    googleSignIn,
   };
 
   return <AuthContext.Provider value={value}>{!isLoading && children}</AuthContext.Provider>;

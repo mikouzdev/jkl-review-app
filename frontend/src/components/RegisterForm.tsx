@@ -1,4 +1,4 @@
-import { Container, Button, Paper, Typography, Box, TextField } from "@mui/material";
+import { Button, Paper, Typography, Box, TextField } from "@mui/material";
 
 export interface RegisterData {
   username: string;
@@ -17,12 +17,13 @@ interface Props {
 
 function RegisterForm({ form, handleChange, handleSubmit, error, isLoading }: Props) {
   return (
-    <Container
+    <Box
       sx={{
-        height: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        width: "100%",
+        maxWidth: 300,
       }}
     >
       <Paper
@@ -94,7 +95,7 @@ function RegisterForm({ form, handleChange, handleSubmit, error, isLoading }: Pr
           </Button>
         </Box>
       </Paper>
-    </Container>
+    </Box>
   );
 }
 

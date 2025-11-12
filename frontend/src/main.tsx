@@ -5,14 +5,19 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import theme from "./theme.ts";
 import "./index.css";
 import App from "./App.tsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
+const CLIENT_ID = "1019147150385-0bcgn38qn19tcbk9f4n0055nkgl04jg8.apps.googleusercontent.com";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </AuthProvider>
+    <GoogleOAuthProvider clientId={CLIENT_ID}>
+      <AuthProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   </StrictMode>
 );

@@ -1,7 +1,7 @@
 generator client {
   provider      = "prisma-client"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
   output        = "../src/generated/prisma"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -36,7 +36,8 @@ model users {
   id            Int       @id @default(autoincrement())
   username      String    @unique @db.VarChar
   email         String    @unique @db.VarChar
-  password_hash String    @db.VarChar
+  password_hash String?   @db.VarChar
+  provider      String    @default("local") @db.VarChar
   role          String?   @db.VarChar
   created_at    DateTime? @db.Timestamp(6)
   ratings       ratings[]

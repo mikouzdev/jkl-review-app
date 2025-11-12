@@ -1,15 +1,22 @@
-import prisma from "../prisma/client.js"
+import prisma from "../prisma/client.js";
 
 export const userRepo = {
-    findUser: (data: { email: string }) => {
-        return prisma.users.findUnique({
-            where: {
-                email: data.email
-            }
-        })
-    },
+  findUser: (data: { email: string }) => {
+    return prisma.users.findUnique({
+      where: {
+        email: data.email,
+      },
+    });
+  },
 
-    createUser: (data: { email: string, username: string, password_hash: string, role: string, created_at: Date }) => {
-        return prisma.users.create({ data });
-    }
-}
+  createUser: (data: {
+    email: string;
+    username: string;
+    password_hash?: string;
+    role: string;
+    created_at: Date;
+    provider: string;
+  }) => {
+    return prisma.users.create({ data });
+  },
+};

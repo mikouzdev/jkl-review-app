@@ -1,8 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
 import RegisterForm, { type RegisterData } from "../components/RegisterForm";
+import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
+import { Container } from "@mui/material";
+import { useAuth } from "../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
+  const navigate = useNavigate();
+  const { googleSignIn } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [form, setForm] = useState<RegisterData>({
@@ -37,6 +43,7 @@ function RegisterPage() {
     try {
       const response = await axios.post("api/users/register", form);
       if (response.status === 201) alert("Käyttäjän luominen onnistui.");
+      navigate("/login");
     } catch (error) {
       setError("Rekisteröinti epäonnistui, yritä uudelleen.");
     } finally {
@@ -44,14 +51,39 @@ function RegisterPage() {
     }
   }
 
+  async function handleGoogleSignIn(credential: CredentialResponse) {
+    setIsLoading(true);
+    try {
+      const success = await googleSignIn(credential);
+      if (success) navigate("/");
+      else return setError("Kirjautuminen epäonnistui.");
+    } catch {
+      setError("Kirjautuminen epäonnistui, yritä uudelleen.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
-    <RegisterForm
-      form={form}
-      handleChange={handleChange}
-      handleSubmit={handleSubmit}
-      error={error}
-      isLoading={isLoading}
-    />
+    <Container
+      sx={{
+        height: "85vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+        gap: 4,
+      }}
+    >
+      <RegisterForm
+        form={form}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        error={error}
+        isLoading={isLoading}
+      />
+      <GoogleLogin onSuccess={handleGoogleSignIn} onError={() => console.log("Error loggin in")} />
+    </Container>
   );
 }
 

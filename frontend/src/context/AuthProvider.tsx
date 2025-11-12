@@ -11,6 +11,8 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  isAdmin: boolean;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
@@ -18,16 +20,11 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // get and set token from localStorage
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) setToken(storedToken);
-  }, []);
-
-  // automatically set token to auth header
+  // set axios header when token changes
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -36,17 +33,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [token]);
 
-  // try to fetch user info if token exists on mount
+  // fetch current user if token exists
   useEffect(() => {
     const fetchUser = async () => {
-      if (!token) return;
+      if (!token) {
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const res = await axios.get("/api/users/me");
         setUser(res.data.user);
       } catch {
-        logout(); // token invalid or expired
+        logout();
       }
+
+      setIsLoading(false);
     };
+
     fetchUser();
   }, [token]);
 
@@ -54,8 +58,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const res = await axios.post("/api/users/login", { email, password });
       const { token: jwt } = res.data;
+
       localStorage.setItem("token", jwt);
       setToken(jwt);
+
       return true;
     } catch {
       return false;
@@ -72,15 +78,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     user,
     token,
     isAuthenticated: !!user,
+    isAdmin: user?.role === "admin",
+    isLoading,
     login,
     logout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{!isLoading && children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within an AuthProvider");
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within an AuthProvider");
+  return ctx;
 };

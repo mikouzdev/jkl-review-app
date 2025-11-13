@@ -4,11 +4,12 @@ import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { Container } from "@mui/material";
+import { useSnackbar } from "../context/SnackbarContext";
 
 function LoginPage() {
-  const { login, googleSignIn } = useAuth();
   const navigate = useNavigate();
-
+  const { showSuccess } = useSnackbar();
+  const { login, googleSignIn } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [form, setForm] = useState<LoginData>({
@@ -34,8 +35,10 @@ function LoginPage() {
     setIsLoading(true);
     try {
       const success = await login(form.email, form.password);
-      if (success) navigate("/");
-      else return setError("Kirjautuminen epäonnistui.");
+      if (success) {
+        showSuccess("Olet kirjautunut sisään.");
+        navigate("/");
+      } else return setError("Kirjautuminen epäonnistui.");
     } catch {
       setError("Kirjautuminen epäonnistui, yritä uudelleen.");
     } finally {
@@ -47,8 +50,10 @@ function LoginPage() {
     setIsLoading(true);
     try {
       const success = await googleSignIn(credential);
-      if (success) navigate("/");
-      else return setError("Kirjautuminen epäonnistui.");
+      if (success) {
+        showSuccess("Olet kirjautunut sisään.");
+        navigate("/");
+      } else return setError("Kirjautuminen epäonnistui.");
     } catch {
       setError("Kirjautuminen epäonnistui, yritä uudelleen.");
     } finally {

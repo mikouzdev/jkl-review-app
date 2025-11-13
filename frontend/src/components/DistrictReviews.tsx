@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelectedDistrict } from "../context/SelectedDistrictContext";
 import DistrictReviewCompact from "./DistrictReviewCompact";
+import { useSnackbar } from "../context/SnackbarContext";
 
 interface ReviewObject {
   id: number;
@@ -26,6 +27,7 @@ interface Review {
 }
 
 function DistrictReviews() {
+  const { showError } = useSnackbar();
   const { selectedDistrict } = useSelectedDistrict();
   const [reviews, setReviews] = useState<ReviewObject>();
 
@@ -41,7 +43,7 @@ function DistrictReviews() {
       const reviews = response.data.reviews;
       setReviews(reviews);
     } catch {
-      alert("Virhe noutaessa arvosteluita.");
+      showError("Virhe noutaessa arvosteluita.");
     }
   }
 

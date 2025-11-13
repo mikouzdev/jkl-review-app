@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DistrictReview, { type DistrictReviewData } from "../components/DistrictReview";
+import { useSnackbar } from "../context/SnackbarContext";
 
 function ProfilePage() {
   const navigate = useNavigate();
+  const { showError, showSuccess } = useSnackbar();
   const { user, isAuthenticated } = useAuth();
   const [reviews, setReviews] = useState<DistrictReviewData[]>([]);
 
@@ -40,20 +42,20 @@ function ProfilePage() {
 
     try {
       const response = await axios.put(`/api/reviews/${reviewId}`, body);
-      if (response.status === 200) alert("Arvostelun päivitys onnistui.");
+      if (response.status === 200) showSuccess("Arvostelu päivitetty.");
       fetchReviews();
     } catch {
-      alert("Arvostelun päivitys epäonnistui.");
+      showError("Arvostelun päivitys epäonnistui.");
     }
   }
 
   async function deleteReview(reviewId: number) {
     try {
       const response = await axios.delete(`/api/reviews/${reviewId}`);
-      if (response.status === 200) alert("Arvostelun poistaminen onnistui.");
+      if (response.status === 200) showSuccess("Arvostelu poistettu.");
       fetchReviews();
     } catch {
-      alert("Arvostelun poistaminen epäonnistui.");
+      showError("Arvostelun poistaminen epäonnistui.");
     }
   }
 

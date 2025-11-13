@@ -26,8 +26,8 @@ model ratings {
   atmosphere     Int
   cost_of_living Int
   comment        String?
-  created_at     DateTime? @db.Timestamp(6)
-  updated_at     DateTime? @db.Timestamp(6)
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
   districts      districts @relation(fields: [district_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   users          users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
@@ -39,6 +39,6 @@ model users {
   password_hash String?   @db.VarChar
   provider      String    @default("local") @db.VarChar
   role          String?   @db.VarChar
-  created_at    DateTime? @db.Timestamp(6)
+  created_at    DateTime  @default(now())
   ratings       ratings[]
 }

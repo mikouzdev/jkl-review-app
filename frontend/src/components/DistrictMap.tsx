@@ -34,7 +34,6 @@ function DistrictMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {/* attach fly-to helper */}
         <FlyToSelected />
       </MapContainer>
     </Box>

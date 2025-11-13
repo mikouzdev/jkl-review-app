@@ -31,7 +31,6 @@ router.post("/google", async (req: Request, res: Response) => {
         username,
         password_hash: "",
         role: "user",
-        created_at: new Date(),
         provider: "google",
       });
     }

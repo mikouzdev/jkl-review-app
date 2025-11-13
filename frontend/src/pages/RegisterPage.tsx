@@ -82,7 +82,7 @@ function RegisterPage() {
         error={error}
         isLoading={isLoading}
       />
-      <GoogleLogin onSuccess={handleGoogleSignIn} onError={() => console.log("Error loggin in")} />
+      <GoogleLogin onSuccess={handleGoogleSignIn} onError={() => console.log("Error registering")} />
     </Container>
   );
 }

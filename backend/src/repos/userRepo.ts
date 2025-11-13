@@ -9,14 +9,7 @@ export const userRepo = {
     });
   },
 
-  createUser: (data: {
-    email: string;
-    username: string;
-    password_hash?: string;
-    role: string;
-    created_at: Date;
-    provider: string;
-  }) => {
+  createUser: (data: { email: string; username: string; password_hash?: string; role: string; provider: string }) => {
     return prisma.users.create({ data });
   },
 };

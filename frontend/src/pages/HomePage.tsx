@@ -4,9 +4,9 @@ import { Box } from "@mui/material";
 import { SelectedDistrictProvider } from "../context/SelectedDistrictContext";
 import DistrictList from "../components/DistrictList";
 import DistrictReviews from "../components/DistrictReviews";
-import ReviewForm from "../components/ReviewForm";
 import type { DistrictData } from "../components/District";
 import DistrictMap from "../components/DistrictMap";
+import ReviewFormDialog from "../components/ReviewDialog";
 
 function HomePage() {
   const [showForm, setShowForm] = useState(false);
@@ -29,10 +29,8 @@ function HomePage() {
 
         <DistrictMap />
 
-        {/* form panel for creating a review, middle */}
-        {showForm && <ReviewForm closeReviewForm={() => setShowForm(false)} />}
+        <ReviewFormDialog open={showForm} onClose={() => setShowForm(false)} />
 
-        {/* panel: list of reviews, left side */}
         <DistrictList
           districts={districts}
           sortOption={sortOption}

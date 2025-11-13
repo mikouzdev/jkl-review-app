@@ -74,7 +74,7 @@ function LoginPage() {
         isLoading={isLoading}
         error={error}
       />
-      <GoogleLogin onSuccess={handleGoogleSignIn} onError={() => console.log("Error loggin in")} />
+      <GoogleLogin onSuccess={handleGoogleSignIn} onError={() => console.log("Error logging in")} />
     </Container>
   );
 }

@@ -15,9 +15,7 @@ function AdminPage() {
   }, [isLoading]);
 
   async function fetchAllReviews() {
-    console.log("REQUEST HEADER:", axios.defaults.headers.common["Authorization"]);
     const response = await axios.get("/api/reviews?limit=20");
-    console.log(response.data);
     setReviews(response.data.reviews);
   }
 

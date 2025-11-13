@@ -4,6 +4,7 @@ import { useState } from "react";
 export interface DistrictReviewData {
   id: number;
   user_id: number;
+  districts: { title: string };
   created_at: string;
   safety: number;
   services: number;
@@ -51,7 +52,7 @@ function DistrictReview({ review, handleEdit, handleDelete }: Props) {
     <Paper elevation={3} sx={{ width: "100%", maxWidth: 350, p: 1 }}>
       <Box sx={{ display: "flex" }}>
         <Typography variant="body1" sx={{ flexGrow: 1 }}>
-          Kaupunginosa {review.district_id}
+          {review.districts.title}
         </Typography>
         <Typography variant="body1" gutterBottom>
           {formattedDate(review.updated_at) ?? formattedDate(review.created_at)}

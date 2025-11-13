@@ -5,9 +5,11 @@ import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { Container } from "@mui/material";
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "../context/SnackbarContext";
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const { showError, showSuccess } = useSnackbar();
   const { googleSignIn } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -42,7 +44,7 @@ function RegisterPage() {
   async function registerRequest() {
     try {
       const response = await axios.post("api/users/register", form);
-      if (response.status === 201) alert("Käyttäjän luominen onnistui.");
+      if (response.status === 201) showSuccess("Käyttäjän luominen onnistui.");
       navigate("/login");
     } catch (error) {
       setError("Rekisteröinti epäonnistui, yritä uudelleen.");
@@ -82,7 +84,7 @@ function RegisterPage() {
         error={error}
         isLoading={isLoading}
       />
-      <GoogleLogin onSuccess={handleGoogleSignIn} onError={() => console.log("Error registering")} />
+      <GoogleLogin onSuccess={handleGoogleSignIn} onError={() => showError("Kirjautuminen epäonnistui.")} />
     </Container>
   );
 }

@@ -2,6 +2,7 @@ import axios from "axios";
 import { Paper, Rating, TextField, Typography, Button, Box } from "@mui/material";
 import { useState } from "react";
 import { useSelectedDistrict } from "../context/SelectedDistrictContext";
+import { useSnackbar } from "../context/SnackbarContext";
 
 interface Ratings {
   safety: number;
@@ -29,6 +30,7 @@ const ratingBoxStyle = {
 };
 
 function ReviewForm({ closeReviewForm }: Props) {
+  const { showSuccess, showError } = useSnackbar();
   const { selectedDistrict } = useSelectedDistrict();
   const [ratings, setRatings] = useState<Ratings>({
     safety: 0,
@@ -49,7 +51,7 @@ function ReviewForm({ closeReviewForm }: Props) {
 
     //validate
     if (ratings.safety === 0 || ratings.services === 0 || ratings.atmosphere === 0 || ratings.cost_of_living === 0)
-      return alert("Arvioi kaikki kriteerit.");
+      return showError("Arvioi kaikki kriteerit");
 
     const data: ReviewSubmitData = {
       ratings,
@@ -58,13 +60,13 @@ function ReviewForm({ closeReviewForm }: Props) {
 
     try {
       const response = await axios.post(`/api/districts/${selectedDistrict?.id}`, data);
-      if (response.status === 201) alert("Arvostelun lähettäminen onnistui.");
+      if (response.status === 201) showSuccess("Arvostelu lähetetty.");
 
       setRatings({ safety: 0, services: 0, atmosphere: 0, cost_of_living: 0 });
       setComment("");
       closeReviewForm();
     } catch {
-      alert("Virhe lähettäessä arvostelua.");
+      showError("Virhe lähettäessä arvostelua.");
     }
   }
 

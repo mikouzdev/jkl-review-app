@@ -3,8 +3,10 @@ import { Container, Typography, Paper } from "@mui/material";
 import { useAuth } from "../context/AuthProvider";
 import { useEffect, useState } from "react";
 import DistrictReview, { type DistrictReviewData } from "../components/DistrictReview";
+import { useSnackbar } from "../context/SnackbarContext";
 
 function AdminPage() {
+  const { showError, showSuccess } = useSnackbar();
   const { isAdmin, isLoading } = useAuth();
 
   const [reviews, setReviews] = useState<DistrictReviewData[]>();
@@ -24,20 +26,20 @@ function AdminPage() {
 
     try {
       const response = await axios.patch(`/api/reviews/${reviewId}`, updatedComment);
-      if (response.status === 200) alert("Kommentin päivitys onnistui.");
+      if (response.status === 200) showSuccess("Kommentti päivitetty.");
       fetchAllReviews();
     } catch {
-      alert("Kommentin päivitys epäonnistui.");
+      showError("Kommentin päivitys epäonnistui.");
     }
   }
 
   async function deleteReview(reviewId: number) {
     try {
       const response = await axios.delete(`/api/reviews/${reviewId}`);
-      if (response.status === 200) alert("Arvostelun poistaminen onnistui.");
+      if (response.status === 200) showSuccess("Arvostelu poistettu.");
       fetchAllReviews();
     } catch {
-      alert("Arvostelun poistaminen epäonnistui.");
+      showError("Arvostelun poistaminen epäonnistui.");
     }
   }
 

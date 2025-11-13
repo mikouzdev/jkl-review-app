@@ -7,6 +7,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "leaflet/dist/leaflet.css";
+import { SnackbarProvider } from "./context/SnackbarContext.tsx";
 
 const CLIENT_ID = "1019147150385-0bcgn38qn19tcbk9f4n0055nkgl04jg8.apps.googleusercontent.com";
 
@@ -14,10 +15,12 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <GoogleOAuthProvider clientId={CLIENT_ID}>
       <AuthProvider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
+        <SnackbarProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </SnackbarProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
   </StrictMode>

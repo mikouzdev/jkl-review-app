@@ -19,6 +19,15 @@ interface Props {
   closeReviewForm: () => void;
 }
 
+const ratingBoxStyle = {
+  display: "flex",
+  alignItems: "center",
+  flexDirection: "column",
+  p: 1,
+  width: "100%",
+  borderBottom: 1,
+};
+
 function ReviewForm({ closeReviewForm }: Props) {
   const { selectedDistrict } = useSelectedDistrict();
   const [ratings, setRatings] = useState<Ratings>({
@@ -60,100 +69,54 @@ function ReviewForm({ closeReviewForm }: Props) {
   }
 
   return (
-    <Paper
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 1,
-        p: 1,
-        width: 400,
-        maxHeight: "100%",
-      }}
-    >
-      <Paper elevation={3} sx={{ p: 1, width: "100%" }}>
+    <Paper component="form" onSubmit={handleSubmit}>
+      <Box sx={{ p: 1, width: "100%" }}>
         <Typography variant="h6" align="center">
           {selectedDistrict?.title}
         </Typography>
-      </Paper>
+      </Box>
 
       <Paper
-        elevation={2}
+        elevation={3}
         sx={{
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
-          gap: 1,
           width: "100%",
+          p: 1,
         }}
       >
-        <Paper
-          elevation={3}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            p: 1,
-            width: "100%",
-          }}
-        >
+        <Box sx={ratingBoxStyle}>
           <Typography>Turvallisuus</Typography>
           <Rating value={ratings.safety} name="safety" onChange={(_, value) => handleRatingChange("safety", value)} />
-        </Paper>
+        </Box>
 
-        <Paper
-          elevation={3}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            p: 1,
-            width: "100%",
-          }}
-        >
+        <Box sx={ratingBoxStyle}>
           <Typography>Palvelut</Typography>
           <Rating
             value={ratings.services}
             name="services"
             onChange={(_, value) => handleRatingChange("services", value)}
           />
-        </Paper>
+        </Box>
 
-        <Paper
-          elevation={3}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            p: 1,
-          }}
-        >
+        <Box sx={ratingBoxStyle}>
           <Typography>Ilmapiiri</Typography>
           <Rating
             value={ratings.atmosphere}
             name="atmosphere"
             onChange={(_, value) => handleRatingChange("atmosphere", value)}
           />
-        </Paper>
+        </Box>
 
-        <Paper
-          elevation={3}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            p: 1,
-          }}
-        >
+        <Box sx={ratingBoxStyle}>
           <Typography>Hinta</Typography>
           <Rating
             value={ratings.cost_of_living}
             name="cost_of_living"
             onChange={(_, value) => handleRatingChange("cost_of_living", value)}
           />
-        </Paper>
+        </Box>
       </Paper>
 
       <Paper
@@ -162,6 +125,7 @@ function ReviewForm({ closeReviewForm }: Props) {
           flexDirection: "column",
           alignItems: "center",
           gap: 1,
+          px: 1,
           width: "100%",
         }}
       >
@@ -175,7 +139,7 @@ function ReviewForm({ closeReviewForm }: Props) {
           name="comment"
           onChange={(e) => setComment(e.target.value)}
         />
-        <Box sx={{ display: "flex", flexDirection: "row", gap: 2, width: "100%", paddingX: 1 }}>
+        <Box sx={{ display: "flex", flexDirection: "row", gap: 2, width: "100%", p: 1 }}>
           <Button variant="contained" size="small" onClick={closeReviewForm}>
             Sulje
           </Button>

@@ -3,6 +3,8 @@ import { createContext, useContext, useState } from "react";
 export interface SelectedDistrict {
   id: number;
   title: string;
+  longitude: number;
+  latitude: number;
 }
 
 type ContextType = {

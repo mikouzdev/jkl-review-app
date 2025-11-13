@@ -1,6 +1,7 @@
 import { Select, Paper, FormControl, InputLabel, MenuItem, Typography, type SelectChangeEvent } from "@mui/material";
 import District, { type DistrictData } from "./District";
 import { useSelectedDistrict } from "../context/SelectedDistrictContext";
+import { type SelectedDistrict } from "../context/SelectedDistrictContext";
 
 interface Props {
   showReviewForm: () => void;
@@ -14,18 +15,18 @@ function DistrictList({ showReviewForm, districts, sortOption, setSortOption }: 
 
   function handleSort(e: SelectChangeEvent<string>) {
     if (sortOption === e.target.value) return;
-    setSortOption(e.target.value); // parent handles fetching
+    setSortOption(e.target.value);
   }
 
-  function handleShowReviewForm(districtId: number, districtTitle: string) {
+  function handleShowReviewForm(district: SelectedDistrict) {
     showReviewForm();
-    if (selectedDistrict?.id === districtId) return;
-    setSelectedDistrict({ id: districtId, title: districtTitle });
+    if (selectedDistrict?.id === district.id) return;
+    setSelectedDistrict(district);
   }
 
-  function handleShowReviews(districtId: number, districtTitle: string) {
-    if (districtId === selectedDistrict?.id) return;
-    setSelectedDistrict({ id: districtId, title: districtTitle });
+  function handleShowReviews(district: SelectedDistrict) {
+    if (selectedDistrict?.id === district.id) return;
+    setSelectedDistrict(district);
   }
 
   return (
@@ -37,9 +38,8 @@ function DistrictList({ showReviewForm, districts, sortOption, setSortOption }: 
         alignItems: "center",
         gap: 1,
         p: 1,
-        maxWidth: 375,
-        width: "100%",
-        height: "90%",
+        width: 350,
+        maxHeight: "100%",
       }}
     >
       <Typography align="center" variant="h5">
@@ -58,7 +58,15 @@ function DistrictList({ showReviewForm, districts, sortOption, setSortOption }: 
 
       <Paper
         elevation={1}
-        sx={{ display: "flex", flexDirection: "column", gap: 1, p: 2, maxHeight: "75vh", overflowY: "scroll" }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+          p: 1,
+          overflowY: "scroll",
+          maxHeight: "100%",
+          width: "100%",
+        }}
       >
         {districts.map((district) => {
           const sortedAvg = Number(district[`avg_${sortOption}` as keyof DistrictData]);

@@ -1,4 +1,5 @@
 import { Box, Typography, Rating, Button, Paper } from "@mui/material";
+import { type SelectedDistrict } from "../context/SelectedDistrictContext";
 
 export interface DistrictData {
   id: number;
@@ -9,13 +10,15 @@ export interface DistrictData {
   avg_cost_of_living: number;
   avg_services: number;
   rating_count: number;
+  longitude: number;
+  latidude: number;
 }
 
 interface DistrictProps {
   district: DistrictData;
   sortedAvg: number;
-  handleShowReviews: (id: number, title: string) => void;
-  handleShowReviewForm: (id: number, title: string) => void;
+  handleShowReviews: (district: SelectedDistrict) => void;
+  handleShowReviewForm: (district: SelectedDistrict) => void;
 }
 
 function District({ district, sortedAvg, handleShowReviewForm, handleShowReviews }: DistrictProps) {
@@ -32,11 +35,33 @@ function District({ district, sortedAvg, handleShowReviewForm, handleShowReviews
         <Typography variant="body2">({district.rating_count})</Typography>
       </Box>
 
-      <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", p: 1 }}>
-        <Button size="small" variant="outlined" onClick={() => handleShowReviewForm(district.id, district.title)}>
+      <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", p: 1, gap: 2 }}>
+        <Button
+          size="small"
+          variant="outlined"
+          onClick={() =>
+            handleShowReviewForm({
+              id: district.id,
+              title: district.title,
+              latitude: district.latidude,
+              longitude: district.longitude,
+            })
+          }
+        >
           Arvostele
         </Button>
-        <Button size="small" variant="outlined" onClick={() => handleShowReviews(district.id, district.title)}>
+        <Button
+          size="small"
+          variant="outlined"
+          onClick={() =>
+            handleShowReviews({
+              id: district.id,
+              title: district.title,
+              latitude: district.latidude,
+              longitude: district.longitude,
+            })
+          }
+        >
           Näytä arvostelut
         </Button>
       </Box>

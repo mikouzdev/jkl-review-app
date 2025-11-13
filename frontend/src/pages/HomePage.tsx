@@ -1,11 +1,12 @@
+import axios from "axios";
+import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import { SelectedDistrictProvider } from "../context/SelectedDistrictContext";
 import DistrictList from "../components/DistrictList";
 import DistrictReviews from "../components/DistrictReviews";
 import ReviewForm from "../components/ReviewForm";
-import { useState, useEffect } from "react";
-import axios from "axios";
 import type { DistrictData } from "../components/District";
+import DistrictMap from "../components/DistrictMap";
 
 function HomePage() {
   const [showForm, setShowForm] = useState(false);
@@ -17,27 +18,21 @@ function HomePage() {
     setDistricts(res.data.districts);
   }
 
-  // fetch on sort change
   useEffect(() => {
     fetchDistricts();
   }, [sortOption]);
 
   return (
     <SelectedDistrictProvider>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "100vw",
-          height: "95vh",
-          p: 2,
-          gap: 1,
-        }}
-      >
+      <Box sx={{ display: "flex", flexDirection: "row", width: "100%", height: "95vh" }}>
         <DistrictReviews />
-        {showForm && <ReviewForm closeReviewForm={() => setShowForm((showForm) => !showForm)} />}
 
+        <DistrictMap />
+
+        {/* form panel for creating a review, middle */}
+        {showForm && <ReviewForm closeReviewForm={() => setShowForm(false)} />}
+
+        {/* panel: list of reviews, left side */}
         <DistrictList
           districts={districts}
           sortOption={sortOption}

@@ -66,14 +66,14 @@ function ReviewForm({ closeReviewForm }: Props) {
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: 2,
+        alignItems: "center",
+        gap: 1,
         p: 1,
-        width: "100%",
-        maxWidth: 350,
-        height: "fit-content",
+        width: 400,
+        maxHeight: "100%",
       }}
     >
-      <Paper elevation={3} sx={{ p: 1 }}>
+      <Paper elevation={3} sx={{ p: 1, width: "100%" }}>
         <Typography variant="h6" align="center">
           {selectedDistrict?.title}
         </Typography>
@@ -86,6 +86,7 @@ function ReviewForm({ closeReviewForm }: Props) {
           justifyContent: "center",
           flexDirection: "column",
           gap: 1,
+          width: "100%",
         }}
       >
         <Paper
@@ -95,6 +96,7 @@ function ReviewForm({ closeReviewForm }: Props) {
             alignItems: "center",
             flexDirection: "column",
             p: 1,
+            width: "100%",
           }}
         >
           <Typography>Turvallisuus</Typography>
@@ -108,6 +110,7 @@ function ReviewForm({ closeReviewForm }: Props) {
             alignItems: "center",
             flexDirection: "column",
             p: 1,
+            width: "100%",
           }}
         >
           <Typography>Palvelut</Typography>
@@ -159,7 +162,7 @@ function ReviewForm({ closeReviewForm }: Props) {
           flexDirection: "column",
           alignItems: "center",
           gap: 1,
-          py: 2,
+          width: "100%",
         }}
       >
         <Typography variant="body1" align="center">
@@ -173,10 +176,10 @@ function ReviewForm({ closeReviewForm }: Props) {
           onChange={(e) => setComment(e.target.value)}
         />
         <Box sx={{ display: "flex", flexDirection: "row", gap: 2, width: "100%", paddingX: 1 }}>
-          <Button variant="contained" size="small" sx={{ marginTop: 2, marginRight: "auto" }} onClick={closeReviewForm}>
+          <Button variant="contained" size="small" onClick={closeReviewForm}>
             Sulje
           </Button>
-          <Button type="submit" variant="contained" size="small" sx={{ marginTop: 2 }}>
+          <Button type="submit" variant="contained" size="small">
             Lähetä arvostelu
           </Button>
         </Box>

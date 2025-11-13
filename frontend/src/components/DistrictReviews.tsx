@@ -57,9 +57,8 @@ function DistrictReviews() {
         alignItems: "center",
         gap: 1,
         p: 1,
-        maxWidth: 375,
-        width: "100%",
-        height: "90%",
+        width: 350,
+        maxHeight: "100%",
       }}
     >
       <Paper elevation={2} sx={{ display: "flex", flexDirection: "column", p: 1, width: "100%" }}>
@@ -98,7 +97,15 @@ function DistrictReviews() {
 
       <Paper
         elevation={1}
-        sx={{ display: "flex", flexDirection: "column", gap: 1, p: 2, width: "100%", overflowY: "scroll" }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+          p: 2,
+          width: "100%",
+          maxHeight: "100%",
+          overflowY: "scroll",
+        }}
       >
         {reviews?.reviews.map((review) => (
           <DistrictReviewCompact key={review.id} review={review} />

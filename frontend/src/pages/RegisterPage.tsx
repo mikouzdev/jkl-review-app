@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import RegisterForm, { type RegisterData } from "../components/RegisterForm";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { Container } from "@mui/material";
@@ -44,7 +43,7 @@ function RegisterPage() {
 
   async function registerRequest() {
     try {
-      const response = await api.post("api/users/register", form);
+      const response = await api.post("/users/register", form);
       if (response.status === 201) showSuccess("Käyttäjän luominen onnistui.");
       navigate("/login");
     } catch (error) {

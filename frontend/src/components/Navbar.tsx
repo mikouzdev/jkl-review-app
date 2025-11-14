@@ -1,9 +1,15 @@
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
 function Navbar() {
+  const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
+
+  function handleLogout() {
+    logout();
+    navigate("/");
+  }
 
   return (
     <AppBar position="static">
@@ -19,7 +25,7 @@ function Navbar() {
             <Button component={Link} to="/profile" variant="outlined">
               Profiili
             </Button>
-            <Button variant="outlined" onClick={logout}>
+            <Button variant="outlined" onClick={handleLogout}>
               Kirjaudu ulos
             </Button>
           </Box>

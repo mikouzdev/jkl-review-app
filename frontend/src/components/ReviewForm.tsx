@@ -3,6 +3,8 @@ import { Paper, Rating, TextField, Typography, Button, Box } from "@mui/material
 import { useState } from "react";
 import { useSelectedDistrict } from "../context/SelectedDistrictContext";
 import { useSnackbar } from "../context/SnackbarContext";
+import { useAuth } from "../context/AuthProvider";
+import api from "../api/api";
 
 interface Ratings {
   safety: number;
@@ -30,6 +32,7 @@ const ratingBoxStyle = {
 };
 
 function ReviewForm({ closeReviewForm }: Props) {
+  const { isAuthenticated } = useAuth();
   const { showSuccess, showError } = useSnackbar();
   const { selectedDistrict } = useSelectedDistrict();
   const [ratings, setRatings] = useState<Ratings>({
@@ -49,7 +52,8 @@ function ReviewForm({ closeReviewForm }: Props) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    //validate
+    if (!isAuthenticated) return showError("Et ole kirjautunut sisään.");
+
     if (ratings.safety === 0 || ratings.services === 0 || ratings.atmosphere === 0 || ratings.cost_of_living === 0)
       return showError("Arvioi kaikki kriteerit");
 
@@ -59,13 +63,13 @@ function ReviewForm({ closeReviewForm }: Props) {
     };
 
     try {
-      const response = await axios.post(`/api/districts/${selectedDistrict?.id}`, data);
+      const response = await api.post(`/districts/${selectedDistrict?.id}`, data);
       if (response.status === 201) showSuccess("Arvostelu lähetetty.");
 
       setRatings({ safety: 0, services: 0, atmosphere: 0, cost_of_living: 0 });
       setComment("");
       closeReviewForm();
-    } catch {
+    } catch (err: any) {
       showError("Virhe lähettäessä arvostelua.");
     }
   }

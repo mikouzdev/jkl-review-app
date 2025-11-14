@@ -1,23 +1,28 @@
-import axios from "axios";
 import { Container, Typography, Paper } from "@mui/material";
 import { useAuth } from "../context/AuthProvider";
 import { useEffect, useState } from "react";
 import DistrictReview, { type DistrictReviewData } from "../components/DistrictReview";
 import { useSnackbar } from "../context/SnackbarContext";
+import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 function AdminPage() {
   const { showError, showSuccess } = useSnackbar();
   const { isAdmin, isLoading } = useAuth();
+  const navigate = useNavigate();
 
   const [reviews, setReviews] = useState<DistrictReviewData[]>();
   useEffect(() => {
     if (isLoading) return;
-    if (!isAdmin) return;
+    if (!isAdmin) {
+      navigate("/");
+      return;
+    }
     fetchAllReviews();
   }, [isLoading]);
 
   async function fetchAllReviews() {
-    const response = await axios.get("/api/reviews?limit=20");
+    const response = await api.get("/reviews?limit=20");
     setReviews(response.data.reviews);
   }
 
@@ -25,7 +30,7 @@ function AdminPage() {
     const updatedComment = { comment: updated.comment };
 
     try {
-      const response = await axios.patch(`/api/reviews/${reviewId}`, updatedComment);
+      const response = await api.patch(`/reviews/${reviewId}`, updatedComment);
       if (response.status === 200) showSuccess("Kommentti päivitetty.");
       fetchAllReviews();
     } catch {
@@ -35,7 +40,7 @@ function AdminPage() {
 
   async function deleteReview(reviewId: number) {
     try {
-      const response = await axios.delete(`/api/reviews/${reviewId}`);
+      const response = await api.delete(`/reviews/${reviewId}`);
       if (response.status === 200) showSuccess("Arvostelu poistettu.");
       fetchAllReviews();
     } catch {

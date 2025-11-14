@@ -6,6 +6,7 @@ import { Container } from "@mui/material";
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "../context/SnackbarContext";
+import api from "../api/api";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ function RegisterPage() {
 
   async function registerRequest() {
     try {
-      const response = await axios.post("api/users/register", form);
+      const response = await api.post("api/users/register", form);
       if (response.status === 201) showSuccess("Käyttäjän luominen onnistui.");
       navigate("/login");
     } catch (error) {

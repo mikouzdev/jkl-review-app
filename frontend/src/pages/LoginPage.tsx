@@ -1,10 +1,10 @@
 import { useState } from "react";
-import LoginForm, { type LoginData } from "../components/LoginForm";
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { Container } from "@mui/material";
 import { useSnackbar } from "../context/SnackbarContext";
+import LoginForm, { type LoginData } from "../components/LoginForm";
 
 function LoginPage() {
   const navigate = useNavigate();

@@ -17,17 +17,21 @@ export interface DistrictReviewData {
 
 interface Props {
   review: DistrictReviewData;
-  handleEdit: (id: number, updated: DistrictReviewData) => void;
-  handleDelete: (id: number) => void;
+  handleEdit: (id: number, updated: DistrictReviewData) => Promise<boolean>;
+  handleDelete: (id: number) => Promise<boolean>;
 }
 
 function DistrictReview({ review, handleEdit, handleDelete }: Props) {
   const [isEditing, setIsEditing] = useState(false);
-
   const [edited, setEdited] = useState<DistrictReviewData>(review);
 
-  const toggleEditing = () => {
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+  const toggleEditing = async () => {
     // check if there are any changes
+    setIsEditing(!isEditing);
+
     if (isEditing) {
       const noChanges =
         review.safety === edited.safety &&
@@ -36,10 +40,18 @@ function DistrictReview({ review, handleEdit, handleDelete }: Props) {
         review.cost_of_living === edited.cost_of_living &&
         review.comment === edited.comment;
 
-      if (!noChanges && handleEdit) handleEdit(review.id, edited);
+      if (!noChanges && handleEdit) {
+        setIsUpdating(true);
+        await handleEdit(review.id, edited);
+        setIsUpdating(false);
+      }
     }
+  };
 
-    setIsEditing(!isEditing);
+  const deleteReview = async () => {
+    setIsDeleting(true);
+    await handleDelete(review.id);
+    setIsDeleting(false);
   };
 
   const formattedDate = (date?: string) => {
@@ -122,10 +134,25 @@ function DistrictReview({ review, handleEdit, handleDelete }: Props) {
         </Box>
 
         <Box sx={{ p: 1, display: "flex", flexDirection: "row", gap: 2 }}>
-          <Button size="small" sx={{ flexGrow: 1 }} variant="outlined" color="success" onClick={toggleEditing}>
+          <Button
+            loading={isUpdating}
+            disabled={isDeleting}
+            size="small"
+            sx={{ flexGrow: 1 }}
+            variant="outlined"
+            color="success"
+            onClick={toggleEditing}
+          >
             {isEditing ? "Tallenna" : "Muokkaa"}
           </Button>
-          <Button size="small" variant="outlined" color="error" onClick={() => handleDelete(review.id)}>
+          <Button
+            loading={isDeleting}
+            disabled={isUpdating}
+            size="small"
+            variant="outlined"
+            color="error"
+            onClick={deleteReview}
+          >
             Poista
           </Button>
         </Box>

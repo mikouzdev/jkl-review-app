@@ -1,16 +1,27 @@
-import { Select, Paper, FormControl, InputLabel, MenuItem, Typography, type SelectChangeEvent } from "@mui/material";
 import District, { type DistrictData } from "./District";
-import { useSelectedDistrict } from "../context/SelectedDistrictContext";
 import { type SelectedDistrict } from "../context/SelectedDistrictContext";
+import { useSelectedDistrict } from "../context/SelectedDistrictContext";
+import {
+  Select,
+  Paper,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Typography,
+  CircularProgress,
+  Box,
+  type SelectChangeEvent,
+} from "@mui/material";
 
 interface Props {
   showReviewForm: () => void;
   districts: DistrictData[];
   sortOption: string;
   setSortOption: (sort: string) => void;
+  isLoading: boolean;
 }
 
-function DistrictList({ showReviewForm, districts, sortOption, setSortOption }: Props) {
+function DistrictList({ showReviewForm, districts, sortOption, setSortOption, isLoading }: Props) {
   const { selectedDistrict, setSelectedDistrict } = useSelectedDistrict();
 
   function handleSort(e: SelectChangeEvent<string>) {
@@ -38,7 +49,7 @@ function DistrictList({ showReviewForm, districts, sortOption, setSortOption }: 
         alignItems: "center",
         gap: 1,
         p: 1,
-        width: 350,
+        minWidth: 350,
         maxHeight: "100%",
       }}
     >
@@ -68,18 +79,26 @@ function DistrictList({ showReviewForm, districts, sortOption, setSortOption }: 
           width: "100%",
         }}
       >
-        {districts.map((district) => {
-          const sortedAvg = Number(district[`avg_${sortOption}` as keyof DistrictData]);
-          return (
-            <District
-              key={district.id}
-              district={district}
-              sortedAvg={sortedAvg}
-              handleShowReviews={handleShowReviews}
-              handleShowReviewForm={handleShowReviewForm}
-            />
-          );
-        })}
+        {isLoading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", p: 1, width: "100%" }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            {districts.map((district) => {
+              const sortedAvg = Number(district[`avg_${sortOption}` as keyof DistrictData]);
+              return (
+                <District
+                  key={district.id}
+                  district={district}
+                  sortedAvg={sortedAvg}
+                  handleShowReviews={handleShowReviews}
+                  handleShowReviewForm={handleShowReviewForm}
+                />
+              );
+            })}
+          </>
+        )}
       </Paper>
     </Paper>
   );

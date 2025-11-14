@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Paper, Rating, TextField, Typography, Button, Box } from "@mui/material";
 import { useState } from "react";
 import { useSelectedDistrict } from "../context/SelectedDistrictContext";
@@ -35,6 +34,7 @@ function ReviewForm({ closeReviewForm }: Props) {
   const { isAuthenticated } = useAuth();
   const { showSuccess, showError } = useSnackbar();
   const { selectedDistrict } = useSelectedDistrict();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [ratings, setRatings] = useState<Ratings>({
     safety: 0,
     services: 0,
@@ -52,6 +52,7 @@ function ReviewForm({ closeReviewForm }: Props) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    setIsSubmitting(true);
     if (!isAuthenticated) return showError("Et ole kirjautunut sisään.");
 
     if (ratings.safety === 0 || ratings.services === 0 || ratings.atmosphere === 0 || ratings.cost_of_living === 0)
@@ -71,6 +72,8 @@ function ReviewForm({ closeReviewForm }: Props) {
       closeReviewForm();
     } catch (err: any) {
       showError("Virhe lähettäessä arvostelua.");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -149,7 +152,7 @@ function ReviewForm({ closeReviewForm }: Props) {
           <Button variant="contained" size="small" onClick={closeReviewForm}>
             Sulje
           </Button>
-          <Button type="submit" variant="contained" size="small">
+          <Button type="submit" variant="contained" size="small" loading={isSubmitting}>
             Lähetä arvostelu
           </Button>
         </Box>

@@ -23,7 +23,7 @@ function DistrictReviewCompact({ review }: Props) {
   };
 
   return (
-    <Paper elevation={3} sx={{ width: "100%", maxWidth: 350, p: 1 }}>
+    <Paper elevation={3} sx={{ width: "100%", p: 2 }}>
       <Box sx={{ display: "flex" }}>
         <Typography variant="body2" sx={{ flexGrow: 1 }}>
           Käyttäjä {review.user_id}

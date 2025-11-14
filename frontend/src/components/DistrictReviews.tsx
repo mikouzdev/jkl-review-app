@@ -1,4 +1,4 @@
-import { Paper, Box, Typography, Rating } from "@mui/material";
+import { Paper, Box, Typography, Rating, CircularProgress } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelectedDistrict } from "../context/SelectedDistrictContext";
@@ -27,6 +27,7 @@ interface Review {
 }
 
 function DistrictReviews() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { showError } = useSnackbar();
   const { selectedDistrict } = useSelectedDistrict();
   const [reviews, setReviews] = useState<ReviewObject>();
@@ -39,11 +40,14 @@ function DistrictReviews() {
   // fetch district reviews for selected district
   async function getReviews() {
     try {
+      setIsLoading(true);
       const response = await axios.get<{ reviews: ReviewObject }>(`/api/districts/${selectedDistrict?.id}/reviews`);
       const reviews = response.data.reviews;
       setReviews(reviews);
     } catch {
       showError("Virhe noutaessa arvosteluita.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -59,7 +63,7 @@ function DistrictReviews() {
         alignItems: "center",
         gap: 1,
         p: 1,
-        width: 350,
+        minWidth: 350,
         maxHeight: "100%",
       }}
     >
@@ -96,22 +100,29 @@ function DistrictReviews() {
           <Rating precision={0.5} value={reviews?.avg_cost_of_living ?? 0} readOnly />
         </Box>
       </Paper>
-
       <Paper
         elevation={1}
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: 1,
-          p: 2,
+          p: 1,
           width: "100%",
           maxHeight: "100%",
           overflowY: "scroll",
         }}
       >
-        {reviews?.reviews.map((review) => (
-          <DistrictReviewCompact key={review.id} review={review} />
-        ))}
+        {isLoading ? (
+          <Box sx={{ display: "flex", justifyContent: "center", p: 1, width: "100%" }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            {reviews?.reviews.map((review) => (
+              <DistrictReviewCompact key={review.id} review={review} />
+            ))}
+          </>
+        )}
       </Paper>
     </Paper>
   );

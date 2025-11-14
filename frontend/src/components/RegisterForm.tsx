@@ -55,6 +55,7 @@ function RegisterForm({ form, handleChange, handleSubmit, error, isLoading }: Pr
             label="Käyttäjänimi"
             variant="outlined"
             fullWidth
+            disabled={isLoading}
           />
           <TextField
             value={form.email}
@@ -64,6 +65,7 @@ function RegisterForm({ form, handleChange, handleSubmit, error, isLoading }: Pr
             type="email"
             variant="outlined"
             fullWidth
+            disabled={isLoading}
           />
           <TextField
             value={form.password}
@@ -73,6 +75,7 @@ function RegisterForm({ form, handleChange, handleSubmit, error, isLoading }: Pr
             type="password"
             variant="outlined"
             fullWidth
+            disabled={isLoading}
           />
           <TextField
             value={form.confirmPassword}
@@ -82,6 +85,7 @@ function RegisterForm({ form, handleChange, handleSubmit, error, isLoading }: Pr
             type="password"
             variant="outlined"
             fullWidth
+            disabled={isLoading}
           />
 
           {error && (
@@ -90,7 +94,7 @@ function RegisterForm({ form, handleChange, handleSubmit, error, isLoading }: Pr
             </Typography>
           )}
 
-          <Button disabled={isLoading} type="submit" variant="contained" size="large" sx={{ mt: 1 }}>
+          <Button loading={isLoading} type="submit" variant="contained" size="large" sx={{ mt: 1 }}>
             Luo käyttäjä
           </Button>
         </Box>

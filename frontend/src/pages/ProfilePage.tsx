@@ -2,31 +2,37 @@ import { Typography, Container, Paper, Box } from "@mui/material";
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import DistrictReview, { type DistrictReviewData } from "../components/DistrictReview";
 import { useSnackbar } from "../context/SnackbarContext";
+import DistrictReview, { type DistrictReviewData } from "../components/DistrictReview";
+import api from "../api/api";
 
 function ProfilePage() {
   const navigate = useNavigate();
   const { showError, showSuccess } = useSnackbar();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [reviews, setReviews] = useState<DistrictReviewData[]>([]);
 
   // navigate to home page if user is not logged in
   useEffect(() => {
+    if (isLoading) return;
+
     if (!isAuthenticated) {
       navigate("/");
       return;
     }
-    fetchReviews();
-  }, [isAuthenticated]);
 
-  if (!user || !isAuthenticated) return null;
+    fetchReviews();
+  }, [isAuthenticated, isLoading]);
 
   async function fetchReviews() {
-    const res = await axios.get<{ reviews: DistrictReviewData[] }>("/api/reviews/me");
-    const { reviews } = res.data;
-    setReviews(reviews);
+    try {
+      const response = await api.get<{ reviews: DistrictReviewData[] }>("/reviews/me");
+      const { reviews } = response.data;
+      setReviews(reviews);
+      showSuccess("Arvostelut ladattu.");
+    } catch {
+      showError("Arvostelujen haku epäonnistui.");
+    }
   }
 
   async function updateReview(reviewId: number, updated: DistrictReviewData) {
@@ -41,7 +47,7 @@ function ProfilePage() {
     };
 
     try {
-      const response = await axios.put(`/api/reviews/${reviewId}`, body);
+      const response = await api.put(`/reviews/${reviewId}`, body);
       if (response.status === 200) showSuccess("Arvostelu päivitetty.");
       fetchReviews();
     } catch {
@@ -51,7 +57,7 @@ function ProfilePage() {
 
   async function deleteReview(reviewId: number) {
     try {
-      const response = await axios.delete(`/api/reviews/${reviewId}`);
+      const response = await api.delete(`/reviews/${reviewId}`);
       if (response.status === 200) showSuccess("Arvostelu poistettu.");
       fetchReviews();
     } catch {

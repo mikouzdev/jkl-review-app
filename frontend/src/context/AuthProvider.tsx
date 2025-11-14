@@ -1,6 +1,8 @@
 import axios from "axios";
 import { googleLogout, type CredentialResponse } from "@react-oauth/google";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useSnackbar } from "./SnackbarContext";
+import api, { registerLogoutHandler } from "../api/api";
 
 interface User {
   userId: number;
@@ -16,13 +18,14 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
-
   googleSignIn: (credential: CredentialResponse) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const { showSuccess } = useSnackbar();
+
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,11 +33,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // set axios header when token changes
   useEffect(() => {
     if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {
-      delete axios.defaults.headers.common["Authorization"];
+      delete api.defaults.headers.common["Authorization"];
     }
   }, [token]);
+
+  useEffect(() => {
+    registerLogoutHandler(logout);
+  }, []);
 
   // fetch current user if token exists
   useEffect(() => {
@@ -45,10 +52,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       try {
-        const res = await axios.get("/api/users/me");
+        const res = await api.get("/users/me");
         setUser(res.data.user);
       } catch {
         logout();
+        return;
       }
 
       setIsLoading(false);
@@ -59,7 +67,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const res = await axios.post("/api/users/login", { email, password });
+      const res = await api.post("/users/login", { email, password });
       const { token: jwt } = res.data;
 
       localStorage.setItem("token", jwt);
@@ -90,6 +98,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem("token");
     setToken(null);
     setUser(null);
+    showSuccess("Olet kirjautunut ulos.");
   };
 
   const value: AuthContextType = {

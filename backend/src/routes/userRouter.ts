@@ -3,6 +3,7 @@ import argon2 from "argon2";
 import { generateToken } from "../utils/jwt.js";
 import { userRepo } from "../repos/userRepo.js";
 import { authenticate, type AuthenticatedRequest } from "../middleware/auth.js";
+import { loginLimiter, registerLimiter } from "../utils/limiters.js";
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ interface User {
 }
 
 // endpoint for registering
-router.post("/register", async (req: Request, res: Response) => {
+router.post("/register", registerLimiter, async (req: Request, res: Response) => {
   const { email, username, password } = req.body;
   if (!email || !username || !password) return res.status(400).send({ error: "missing details" });
 
@@ -34,7 +35,7 @@ router.post("/register", async (req: Request, res: Response) => {
 });
 
 // endpoint for log in
-router.post("/login", async (req: Request, res: Response) => {
+router.post("/login", loginLimiter, async (req: Request, res: Response) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).send({ error: "missing details login" });
 

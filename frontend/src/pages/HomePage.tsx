@@ -7,15 +7,25 @@ import DistrictReviews from "../components/DistrictReviews";
 import type { DistrictData } from "../components/District";
 import DistrictMap from "../components/DistrictMap";
 import ReviewFormDialog from "../components/ReviewDialog";
+import { useSnackbar } from "../context/SnackbarContext";
 
 function HomePage() {
+  const { showError } = useSnackbar();
   const [showForm, setShowForm] = useState(false);
   const [districts, setDistricts] = useState<DistrictData[]>([]);
   const [sortOption, setSortOption] = useState<string>("overall");
+  const [isDistrictsLoading, setIsDistrictsLoading] = useState<boolean>(false);
 
   async function fetchDistricts() {
-    const res = await axios.get<{ districts: DistrictData[] }>(`/api/districts?sort=${sortOption}`);
-    setDistricts(res.data.districts);
+    try {
+      setIsDistrictsLoading(true);
+      const res = await axios.get<{ districts: DistrictData[] }>(`/api/districts?sort=${sortOption}`);
+      setDistricts(res.data.districts);
+    } catch {
+      showError("Virhe noutaessa kaupunginosia.");
+    } finally {
+      setIsDistrictsLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -36,6 +46,7 @@ function HomePage() {
           sortOption={sortOption}
           setSortOption={setSortOption}
           showReviewForm={() => setShowForm(true)}
+          isLoading={isDistrictsLoading}
         />
       </Box>
     </SelectedDistrictProvider>

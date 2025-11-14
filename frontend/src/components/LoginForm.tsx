@@ -54,6 +54,7 @@ function LoginForm({ form, handleChange, handleSubmit, error, isLoading }: Props
             type="email"
             variant="outlined"
             fullWidth
+            disabled={isLoading}
           />
           <TextField
             value={form.password}
@@ -63,6 +64,7 @@ function LoginForm({ form, handleChange, handleSubmit, error, isLoading }: Props
             type="password"
             variant="outlined"
             fullWidth
+            disabled={isLoading}
           />
 
           {error && (
@@ -71,7 +73,7 @@ function LoginForm({ form, handleChange, handleSubmit, error, isLoading }: Props
             </Typography>
           )}
 
-          <Button disabled={isLoading} type="submit" variant="contained" size="large" sx={{ mt: 1 }}>
+          <Button loading={isLoading} type="submit" variant="contained" size="large" sx={{ mt: 1 }}>
             Kirjaudu sisään
           </Button>
         </Box>

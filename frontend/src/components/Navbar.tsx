@@ -16,26 +16,26 @@ function Navbar() {
       <Toolbar>
         <Box sx={{ flexGrow: 1 }}>
           <Typography component={Link} variant="h6" to="/" sx={{ textDecoration: "none", color: "inherit" }}>
-            Jyväskylä arvostelut
+            arvostele.jkl
           </Typography>
         </Box>
 
         {isAuthenticated ? (
           <Box sx={{ display: "flex", gap: 1 }}>
-            <Button component={Link} to="/profile" variant="outlined">
+            <Button component={Link} to="/profile" variant="contained" size="small">
               Profiili
             </Button>
-            <Button variant="outlined" onClick={handleLogout}>
+            <Button variant="contained" onClick={handleLogout} size="small">
               Kirjaudu ulos
             </Button>
           </Box>
         ) : (
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Button variant="outlined" component={Link} to="/login">
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <Button variant="contained" component={Link} to="/login" size="small">
               Kirjaudu
             </Button>
-            <Button variant="outlined" component={Link} to="/register">
-              Rekisteröidy
+            <Button variant="contained" component={Link} to="/register" size="small">
+              Luo Käyttäjä
             </Button>
           </Box>
         )}

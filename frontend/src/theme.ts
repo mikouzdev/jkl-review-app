@@ -4,18 +4,21 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#1976d2",
+      main: "#FFFFFF",
+    },
+    secondary: {
+      main: "#4ECDC4",
     },
     background: {
-      default: "#121212",
-      paper: "#1e1e1e",
+      default: "#000000ff",
+      paper: "#292F36",
     },
   },
   components: {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundColor: "#0D0221",
+          backgroundColor: "#262c32ff",
           color: "#fff",
         },
       },

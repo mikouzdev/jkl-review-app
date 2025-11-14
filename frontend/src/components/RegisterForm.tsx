@@ -36,7 +36,7 @@ function RegisterForm({ form, handleChange, handleSubmit, error, isLoading }: Pr
         }}
       >
         <Typography variant="h5" align="center" gutterBottom>
-          Register
+          Käyttäjän luonti
         </Typography>
         <Box
           component="form"

@@ -53,6 +53,11 @@ router.post("/:id", authenticate, userActionLimiter, async (req: AuthenticatedRe
     return res.status(400).send({ error: "All rating fields are required" });
   }
 
+  const existingReviews = await reviewRepo.getAllUserReviews(userId);
+  if (existingReviews.some((review) => review.district_id === districtId)) {
+    return res.status(400).send({ error: "user has already reviewed this district" });
+  }
+
   const createdReview = await reviewRepo.createReview(userId, districtId, review);
   if (!createdReview) return res.status(500).send({ error: "could not create review" });
 

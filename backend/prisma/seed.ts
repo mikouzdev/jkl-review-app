@@ -3,8 +3,7 @@ import { PrismaClient } from "../src/generated/prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  // await seedDistricts();
-  //   await seedRatings();
+  await seedDistricts();
 }
 
 async function seedDistricts() {
@@ -28,50 +27,6 @@ async function seedDistricts() {
       { title: "Korpilahti", latitude: 25.5611984, longitude: 62.0168002 },
     ],
   });
-}
-
-async function seedRatings() {
-  // wipe existing
-  await prisma.ratings.deleteMany();
-
-  const comments = [
-    "Nice and peaceful area.",
-    "Could use better public transport.",
-    "Great atmosphere but expensive rent.",
-    "Feels unsafe at night.",
-    "Perfect for families!",
-    "Too far from the center.",
-    "Lots of services nearby.",
-    "Wouldn't recommend living here.",
-    "Affordable and quiet.",
-    "Love the parks and nature.",
-  ];
-
-  const random = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-  const data = [];
-
-  // 5 users, 14 districts
-  for (let user = 1; user <= 5; user++) {
-    for (let district = 1; district <= 14; district++) {
-      // Randomly decide if this user rated this district
-      if (Math.random() < 0.6) {
-        data.push({
-          district_id: district,
-          user_id: user,
-          safety: random(1, 5),
-          services: random(1, 5),
-          atmosphere: random(1, 5),
-          cost_of_living: random(1, 5),
-          comment: Math.random() < 0.7 ? comments[random(0, comments.length - 1)] : null,
-          created_at: new Date(),
-          updated_at: new Date(),
-        });
-      }
-    }
-  }
-
-  await prisma.ratings.createMany({ data });
 }
 
 main()

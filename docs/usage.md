@@ -8,8 +8,11 @@
 
 `docker compose -f docker-compose.dev.yml up --build`
 
-- it starts both front and backend and refreshes on changes.
-- after you have your docker dev container running, you need to exec npm run prisma:migrate:dev inside of it.
+- it starts both front and backend, and refreshes on changes.
+- after you have your docker dev container running, you need to exec the following commands inside the container:
+
+1. `npm run prisma:migrate:dev`
+2. `npm run prisma:seed`
 
 ## "Production" compose stack
 

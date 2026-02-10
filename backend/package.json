@@ -7,7 +7,9 @@
     "build": "tsc",
     "dev": "prisma generate && nodemon --legacy-watch",
     "lint": "eslint . --ext .ts",
-    "prisma:migrate:dev": "dotenvx run -f ../.env -- prisma migrate dev"
+    "prisma:generate": "dotenvx run -f ../.env -- prisma generate",
+    "prisma:migrate:dev": "dotenvx run -f ../.env -- prisma migrate dev",
+    "prisma:seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",

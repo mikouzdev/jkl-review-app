@@ -9,7 +9,7 @@ services:
       - ./backend:/app
       - /app/node_modules
     env_file:
-      - .env
+      - ./backend/.env
     environment:
       - NODE_ENV=development
       - PORT=3000
@@ -26,8 +26,6 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    env_file:
-      - .env
     environment:
       - NODE_ENV=development
     depends_on:
@@ -38,9 +36,9 @@ services:
     image: postgres:17-alpine
     container_name: postgres_db
     env_file:
-      - .env
+      - ./backend/.env
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 3s
       timeout: 3s
       retries: 5

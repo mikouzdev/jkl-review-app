@@ -36,7 +36,6 @@ function DistrictMap() {
         scrollWheelZoom={false}
         style={{ width: "100%", height: "100%" }}
         maxBounds={bounds}
-        trackResize={false}
         doubleClickZoom={false}
         maxZoom={MAX_ZOOM}
       >
